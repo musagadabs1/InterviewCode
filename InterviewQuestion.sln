@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterviewQuestion", "InterviewQuestion\InterviewQuestion.csproj", "{A9FDE741-5CF4-40D2-B21A-91B35C4175B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterviewQuestionAPI", "InterviewQuestion\InterviewQuestionAPI.csproj", "{A9FDE741-5CF4-40D2-B21A-91B35C4175B8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterviewQuestion.Core", "InterviewQuestion.Core\InterviewQuestion.Core.csproj", "{A42DD6D9-811A-46FF-A2F9-3F31F0B47953}"
 EndProject
