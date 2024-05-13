@@ -4,9 +4,9 @@
     {
         MultipleChoice = 1,
         Paragraph,
-        YesNO,
+        YesNo,
         Dropdown,
         Date,
-        Number
+        Numeric
     }
 }

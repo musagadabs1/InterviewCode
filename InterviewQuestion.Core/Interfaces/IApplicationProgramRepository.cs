@@ -8,11 +8,11 @@ namespace InterviewQuestion.Core.Interfaces
     {
         Task<ItemResponse<AppProgram>> AddApplicationProgramAsync(ApplicationProgramDto model);
         Task<ApplicationProgram> UpdateApplicationProgramAsync(ApplicationProgramDto model);
-        Task<ItemResponse<AppProgram>> UpdateApplicationProgramAsync(ApplicationProgramDto model, string partitionKey);
+        Task<ItemResponse<AppProgram>> UpdateApplicationProgramCosmosAsync(ApplicationProgramDto model);
         Task<ApplicationProgram> DeleteApplicationProgramAsync(int id);
-        Task<ApplicationProgram> DeleteApplicationProgramAsync(int id, string partitionKey);
+        Task<ApplicationProgram> DeleteApplicationProgramAsync(string id, string partitionKey);
         Task<ApplicationProgram> GetApplicationProgramByIdAsync(int id);
-        Task<ApplicationProgram> GetApplicationProgramByIdAsync(int id, string partitionKey);
-        Task<List<ApplicationProgram>> GetApplicationProgramsAsync();
+        Task<AppProgram> GetApplicationProgramByIdAsync(string id, string partitionKey);
+        Task<List<AppProgram>> GetApplicationProgramsAsync();
     }
 }

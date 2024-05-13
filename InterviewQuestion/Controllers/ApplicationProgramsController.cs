@@ -23,9 +23,9 @@ namespace InterviewQuestion.Controllers
         }
 
         [HttpGet("{appProgramId}")]
-        public async Task<IActionResult> GetApplicationProgramById(int appProgramId)
+        public async Task<IActionResult> GetApplicationProgramById(AppDeleteDto model)
         {
-            var appPrograms = await _applicationProgramRepository.GetApplicationProgramByIdAsync(appProgramId);
+            var appPrograms = await _applicationProgramRepository.GetApplicationProgramByIdAsync(model.Id, model.Title);
             return Ok(appPrograms);
         }
 
@@ -65,12 +65,12 @@ namespace InterviewQuestion.Controllers
         }
 
         // POST: ApplicationProgramsController/Delete/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteApplicationProgram(int id)
+        [HttpPost]
+        public async Task<IActionResult> DeleteApplicationProgram(AppDeleteDto model)
         {
             try
             {
-                var appProgram = await _applicationProgramRepository.DeleteApplicationProgramAsync(id);
+                var appProgram = await _applicationProgramRepository.DeleteApplicationProgramAsync(model.Id, model.Title);
                 return Ok(appProgram);
             }
             catch (Exception ex)

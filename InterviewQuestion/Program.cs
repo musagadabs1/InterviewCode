@@ -18,13 +18,13 @@ builder.Services.AddDbContext<EmployeeDbContext>(option => option.UseSqlServer(b
 builder.Services.AddCors();
 
 builder.Services.AddScoped<IApplicationProgramRepository, ApplicationProgramRepository>();
-builder.Services.AddScoped<IDateQuestionRepository, DateQuestionRepository>();
-builder.Services.AddScoped<IEmployeeReposiory, EmployeeReposiory>();
-builder.Services.AddScoped<INumericQuestionRepository, NumericQuestionRepository>();
-builder.Services.AddScoped<IParagraphQuestionRepository, ParagraphQuestionRepository>();
-builder.Services.AddScoped<IYesNoQuestionRepository, YesNoQuestionRepository>();
-builder.Services.AddScoped<IMultipleChoiceRepository, MultipleChoiceRepository>();
-builder.Services.AddScoped<IMultipleChoiceTemplateRepository, MultipleChoiceTemplateRepository>();
+builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+//builder.Services.AddScoped<IEmployeeReposiory, EmployeeReposiory>();
+//builder.Services.AddScoped<INumericQuestionRepository, NumericQuestionRepository>();
+//builder.Services.AddScoped<IParagraphQuestionRepository, ParagraphQuestionRepository>();
+//builder.Services.AddScoped<IYesNoQuestionRepository, YesNoQuestionRepository>();
+//builder.Services.AddScoped<IMultipleChoiceRepository, MultipleChoiceRepository>();
+//builder.Services.AddScoped<IMultipleChoiceTemplateRepository, MultipleChoiceTemplateRepository>();
 
 
 builder.Services.AddControllers();

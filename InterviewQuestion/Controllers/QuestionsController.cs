@@ -6,20 +6,20 @@ namespace InterviewQuestion.Controllers
 {
     [Route("api/v1/[controller]/[action]")]
     [ApiController]
-    public class DateQuestionsController : ControllerBase
+    public class QuestionsController : ControllerBase
     {
-        IDateQuestionRepository _dateQuestionRepository;
-        public DateQuestionsController(IDateQuestionRepository dateRepository)
+        IQuestionRepository _questionRepository;
+        public QuestionsController(IQuestionRepository dateRepository)
         {
-            _dateQuestionRepository = dateRepository;
+            _questionRepository = dateRepository;
         }
         // GET: api/<DateQuestionsController>
-        [HttpGet]
-        public async Task<IActionResult> GetDateQuestions()
+        [HttpPost]
+        public async Task<IActionResult> CreateParagraphQuestions(ParagraphQuestion model)
         {
             try
             {
-                var appPrograms = await _dateQuestionRepository.GetDateQuestionsAsync();
+                var appPrograms = await _questionRepository.AddParagraphQuestionAsync(model);
                 return Ok(appPrograms);
             }
             catch (Exception ex)
@@ -30,12 +30,12 @@ namespace InterviewQuestion.Controllers
         }
 
         // GET api/<DateQuestionsController>/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetDateQuestionById(int id)
+        [HttpPost]
+        public async Task<IActionResult> CreateYesNoQuestion(YesNoQuestion model)
         {
             try
             {
-                var appPrograms = await _dateQuestionRepository.GetDateQuestionByIdAsync(id);
+                var appPrograms = await _questionRepository.AddYesNoQuestionAsync(model);
                 return Ok(appPrograms);
             }
             catch (Exception ex)
@@ -51,7 +51,7 @@ namespace InterviewQuestion.Controllers
         {
             try
             {
-                var appProgram = await _dateQuestionRepository.AddDateQuestionAsync(model);
+                var appProgram = await _questionRepository.AddDateQuestionAsync(model);
 
                 return Ok(appProgram);
             }
@@ -63,11 +63,11 @@ namespace InterviewQuestion.Controllers
 
         // PUT api/<DateQuestionsController>/5
         [HttpPost]
-        public async Task<IActionResult> UpdateDateQuestion([FromBody] DateQuestion model)
+        public async Task<IActionResult> MultipleChoiceQuestion([FromBody] MultipleChoiceTemplate model)
         {
             try
             {
-                var appProgram = await _dateQuestionRepository.UpdateDateQuestionAsync(model);
+                var appProgram = await _questionRepository.AddMultipleChoiceQuestionAsync(model);
                 return Ok(appProgram);
             }
             catch (Exception ex)
@@ -76,12 +76,12 @@ namespace InterviewQuestion.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDateQuestion(int id)
+        [HttpPost]
+        public async Task<IActionResult> CreateNumericQuestion(NumericQuestion model)
         {
             try
             {
-                var appProgram = await _dateQuestionRepository.DeleteDateQuestionAsync(id);
+                var appProgram = await _questionRepository.AddNumericQuestionAsync(model);
                 return Ok(appProgram);
             }
             catch (Exception ex)

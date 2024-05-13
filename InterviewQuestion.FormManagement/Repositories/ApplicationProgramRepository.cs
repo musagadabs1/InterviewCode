@@ -18,7 +18,7 @@ namespace InterviewQuestion.FormManagement.Repositories
         private static Container ContainerClient()
         {
             var comosDbClient = new CosmosClient(CosmosUtil.CosmosDBAccountUri, CosmosUtil.CosmosAccountPrimaryKey);
-            var containerClient = comosDbClient.GetContainer(CosmosUtil.CosmosDbName, CosmosUtil.CosmosContainerName);
+            var containerClient = comosDbClient.GetContainer(CosmosUtil.CosmosAppProgramDbName, CosmosUtil.CosmosAppProgramContainerName);
             return containerClient;
 
         }
@@ -28,15 +28,14 @@ namespace InterviewQuestion.FormManagement.Repositories
             {
                 var container = ContainerClient();
 
-                var property = await container.ReadContainerAsync();
-
+                //var property = await container.ReadContainerAsync();
+                //var PartitonKeyPath = property.Resource.PartitionKeyPath;
                 //var partitionKeyPath=property.
 
                 var appProgram = new AppProgram
                 {
                     Title = model.Title,
                     Description = model.Description,
-                    InterviewId = "InterviewId",
                     Id = Guid.NewGuid().ToString(),
                     Employee = new Employee
                     {
@@ -60,7 +59,7 @@ namespace InterviewQuestion.FormManagement.Repositories
 
                 };
 
-                var response = await container.CreateItemAsync(appProgram, new PartitionKey(appProgram.InterviewId));
+                var response = await container.CreateItemAsync(appProgram, new PartitionKey(appProgram.Title));
                 //var result = _dbContext.ApplicationPrograms.Add(appProgram);
                 //await _dbContext.SaveChangesAsync();
                 return response;
@@ -94,7 +93,7 @@ namespace InterviewQuestion.FormManagement.Repositories
                 throw ex;
             }
         }
-        public async Task<ApplicationProgram> DeleteApplicationProgramAsync(int id, string partitionKey)
+        public async Task<ApplicationProgram> DeleteApplicationProgramAsync(string id, string partitionKey)
         {
             try
             {
@@ -136,12 +135,12 @@ namespace InterviewQuestion.FormManagement.Repositories
                 throw ex;
             }
         }
-        public async Task<ApplicationProgram> GetApplicationProgramByIdAsync(int id, string partitionKey)
+        public async Task<AppProgram> GetApplicationProgramByIdAsync(string id, string partitionKey)
         {
             try
             {
                 var container = ContainerClient();
-                ItemResponse<ApplicationProgram> response = await container.ReadItemAsync<ApplicationProgram>(id.ToString(), new PartitionKey(partitionKey));
+                ItemResponse<AppProgram> response = await container.ReadItemAsync<AppProgram>(id.ToString(), new PartitionKey(partitionKey));
                 return response;
             }
             catch (Exception ex)
@@ -151,17 +150,17 @@ namespace InterviewQuestion.FormManagement.Repositories
             }
         }
 
-        public async Task<List<ApplicationProgram>> GetApplicationProgramsAsync()
+        public async Task<List<AppProgram>> GetApplicationProgramsAsync()
         {
             try
             {
                 var container = ContainerClient();
-                var sqlQuery = "SELECT * from ApllicationProgram";
+                var sqlQuery = "SELECT * from c";
 
                 var queryDefinition = new QueryDefinition(sqlQuery);
-                var queryResultSelector = container.GetItemQueryIterator<ApplicationProgram>(queryDefinition);
+                var queryResultSelector = container.GetItemQueryIterator<AppProgram>(queryDefinition);
 
-                var appPrograms = new List<ApplicationProgram>();
+                var appPrograms = new List<AppProgram>();
                 while (queryResultSelector.HasMoreResults)
                 {
                     var currentResultSet = await queryResultSelector.ReadNextAsync();
@@ -170,16 +169,6 @@ namespace InterviewQuestion.FormManagement.Repositories
                         appPrograms.Add(item);
                     }
                 }
-
-                //var result = await _dbContext.ApplicationPrograms
-                //    .Include(x => x.Employee)
-                //    .Include(x => x.MultipleChoiceTemplate)
-                //    .Include(x => x.DateQuestion)
-                //    .Include(x => x.ParagraphQuestion)
-                //    .Include(x => x.NumericQuestion)
-                //    .Include(x => x.YesNoQuestion)
-                //    .ToListAsync();
-                //return result;
                 return appPrograms;
             }
             catch (Exception ex)
@@ -189,12 +178,12 @@ namespace InterviewQuestion.FormManagement.Repositories
             }
         }
 
-        public async Task<ItemResponse<AppProgram>> UpdateApplicationProgramAsync(ApplicationProgramDto model, string partitionKey)
+        public async Task<ItemResponse<AppProgram>> UpdateApplicationProgramCosmosAsync(ApplicationProgramDto model)
         {
             try
             {
                 var container = ContainerClient();
-                ItemResponse<AppProgram> res = await container.ReadItemAsync<AppProgram>(model.ApplicationProgramId.ToString(), new PartitionKey(partitionKey));
+                ItemResponse<AppProgram> res = await container.ReadItemAsync<AppProgram>(model.ApplicationProgramId.ToString(), new PartitionKey(model.Title));
                 //Get Existing Item
                 var existingItem = res.Resource;
                 //Replace existing item values with new values
@@ -204,7 +193,7 @@ namespace InterviewQuestion.FormManagement.Repositories
                 existingItem.ParagraphQuestion = model.ParagraphQuestion;
                 existingItem.MultipleChoiceTemplate = model.MultipleChoiceTemplate;
 
-                var updateRes = await container.ReplaceItemAsync(existingItem, model.ApplicationProgramId.ToString(), new PartitionKey(partitionKey));
+                var updateRes = await container.ReplaceItemAsync(existingItem, model.ApplicationProgramId.ToString(), new PartitionKey(model.Title));
                 return updateRes;
             }
             catch (Exception ex)
@@ -224,11 +213,6 @@ namespace InterviewQuestion.FormManagement.Repositories
                     yesNo.UpdatedOn = DateTime.Now;
                     yesNo.DateQuestionId = model.ApplicationProgramId;
                     yesNo.Description = model.Description;
-                    //yesNo.YesNoQuestion = model.YesNoQuestion;
-                    //yesNo.MultipleChoiceTemplateId = model.MultipleChoiceTemplateId;
-                    //yesNo.ParagraphQuestionId = model.ParagraphQuestionId;
-                    //yesNo.ParagraphQuestionId = model.ParagraphQuestionId;
-                    //yesNo.NumericQuestionId = model.NumericQuestionId;
                     yesNo.Title = model.Title;
 
                     await _dbContext.SaveChangesAsync();

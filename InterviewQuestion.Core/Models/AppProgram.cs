@@ -4,8 +4,7 @@ namespace InterviewQuestion.Core.Models
 {
     public class AppProgram
     {
-        [JsonProperty(PropertyName = "interviewid")]
-        public string InterviewId { get; set; }
+
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
         public string Title { get; set; }
